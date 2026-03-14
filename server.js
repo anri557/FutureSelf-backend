@@ -10,19 +10,21 @@ app.use(cors());
 app.use(express.json());
 
 
-const db = mysql.createConnection({
+const db = mysql.createPool({
   host: process.env.DB_HOST,
   user: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
   port: process.env.DB_PORT,
+  waitForConnections: true,
+  connectionLimit: 10,
+  queueLimit: 0,
 });
 
-db.connect((err) => {
+db.query("SELECT 1", (err) => {
   if (err) { console.error("DB connection failed:", err); return; }
   console.log("✦ MySQL connected");
 });
-
 // Save a letter
 app.post("/api/letters", (req, res) => {
   const { uid, to_name, email, body, open_date } = req.body;
