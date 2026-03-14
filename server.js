@@ -6,7 +6,9 @@ const axios = require("axios");
 const cors = require("cors");
 
 const app = express();
-app.use(cors());
+app.use(cors({
+  origin: "https://anri557.github.io"
+}));
 app.use(express.json());
 
 
@@ -25,7 +27,7 @@ db.query("SELECT 1", (err) => {
   if (err) { console.error("DB connection failed:", err); return; }
   console.log("✦ MySQL connected");
 });
-// Save a letter
+
 app.post("/api/letters", (req, res) => {
   const { uid, to_name, email, body, open_date } = req.body;
   db.query(
